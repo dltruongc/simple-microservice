@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import PostCreate from "./PostCreate";
 import Posts from "./Posts";
 import axios from "axios";
 import { PostsM } from "./models/Post";
+import PostCreate from "./PostCreate";
 
 function App() {
   const [posts, setPosts] = useState<PostsM>({});
 
   const fetchPosts = () => {
-    axios.get("http://localhost:4000/posts").then((res) => {
+    axios.get("http://localhost:9000/posts").then((res) => {
       const newPosts = PostsM.fromJson(res.data);
       setPosts(newPosts);
     });

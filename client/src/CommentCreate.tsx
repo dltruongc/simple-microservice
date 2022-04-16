@@ -1,14 +1,13 @@
 import React, { FormEvent, FormEventHandler, useState } from "react";
 import axios from "axios";
 
-export default function CommentCreate({ postId, onCreate }: { postId: string; onCreate: () => void }) {
+export default function CommentCreate({ postId }: { postId: string }) {
   const [content, setContent] = useState("");
 
   const onSubmit: FormEventHandler<HTMLFormElement> = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     axios.post(`http://localhost:4001/posts/${postId}/comments`, { content }).then((_res) => {
-      onCreate();
       setContent("");
     });
   };
