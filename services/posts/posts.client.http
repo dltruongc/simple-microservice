@@ -1,0 +1,11 @@
+### GET posts
+GET http://localhost:4000/posts
+
+### CREATE Posts
+POST http://localhost:4000/posts
+Accept: application/json
+Content-Type: application/json
+
+{
+  "title": "New Post"
+}
