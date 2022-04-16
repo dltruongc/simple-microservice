@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
+    "dev:posts": "PORT=4000 nodemon posts/index.ts",
     "dev:comments": "PORT=4001 nodemon comments/index.ts",
-    "dev:posts": "PORT=4000 nodemon posts/index.ts"
+    "dev:query": "PORT=9000 nodemon query/index.ts",
+    "dev:eventbus": "PORT=9001 nodemon event-bus/index.ts"
   },
   "dependencies": {
     "axios": "^0.26.1",

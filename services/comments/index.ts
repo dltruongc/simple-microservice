@@ -1,17 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import * as crypto from 'crypto';
-
-type CommentStatus = 'approved' | 'pending' | 'rejected';
-
-type CommentType = {
-  id: string;
-  postId: string;
-  content: string;
-  status: CommentStatus;
-};
-
-type CommentByPostId = { [postId: string]: CommentType[] };
+import axios from 'axios';
+import { CommentByPostId, Event, EventTypeEnum } from '../types';
 
 const app = express();
 const port = process.env.PORT;
@@ -21,6 +12,10 @@ const port = process.env.PORT;
 const commentsByPost: CommentByPostId = {};
 
 app.use(cors()).use(express.json());
+
+function emitToEventBus(event: Event) {
+  axios.post('http://localhost:9001/events', event);
+}
 
 app
   .route('/posts/:postId/comments')
@@ -44,7 +39,31 @@ app
       status: 'pending',
     });
 
+    emitToEventBus({
+      type: EventTypeEnum.CommentCreated,
+      data: comments,
+    });
+
     return res.json(comments);
   });
 
-app.listen(port, () => console.log('[Comments] listening on ' + port));
+app.route('/events').post((req, res) => {
+  const { type, data } = req.body as Event;
+
+  console.log('Event Received: ' + EventTypeEnum[type]);
+  return res.json({});
+});
+
+app.listen(port, async () => {
+  console.log('[Comments] listening on ' + port);
+
+  // dealing with missed events
+  const res = await axios.get<Event[]>('http://localhost:9001/events/comment');
+
+  const events = res.data;
+
+  for (const event of events) {
+    console.log('Handling missed event: ' + EventTypeEnum[event.type]);
+    // Something ...
+  }
+});
