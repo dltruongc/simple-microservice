@@ -34,6 +34,12 @@ app.post('/events', async (req, res) => {
     missedEvents.comment.push(event);
   }
   try {
+    await axios.post('http://localhost:4002/events', event);
+  } catch (e) {
+    console.log('[Moderation] Missed event ' + EventTypeEnum[event.type]);
+    missedEvents.comment.push(event);
+  }
+  try {
     await axios.post('http://localhost:9000/events', event);
   } catch (e) {
     console.log('[Query] Missed event ' + EventTypeEnum[event.type]);

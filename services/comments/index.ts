@@ -41,7 +41,7 @@ app
 
     emitToEventBus({
       type: EventTypeEnum.CommentCreated,
-      data: comments,
+      data: comments[comments.length - 1],
     });
 
     return res.json(comments);
@@ -51,6 +51,16 @@ app.route('/events').post((req, res) => {
   const { type, data } = req.body as Event;
 
   console.log('Event Received: ' + EventTypeEnum[type]);
+
+  if (type === EventTypeEnum.CommentModerated) {
+    let comment = commentsByPost[data.postId].find((cmt) => cmt.id === data.id);
+
+    if (comment) {
+      comment.status = data.status;
+      emitToEventBus({ type: EventTypeEnum.CommentUpdated, data: comment });
+    }
+  }
+
   return res.json({});
 });
 

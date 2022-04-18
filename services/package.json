@@ -6,6 +6,7 @@
     "dev:posts": "PORT=4000 nodemon posts/index.ts",
     "dev:comments": "PORT=4001 nodemon comments/index.ts",
     "dev:query": "PORT=9000 nodemon query/index.ts",
+    "dev:moderation": "PORT=4002 nodemon moderation/index.ts",
     "dev:eventbus": "PORT=9001 nodemon event-bus/index.ts"
   },
   "dependencies": {

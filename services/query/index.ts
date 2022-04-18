@@ -16,7 +16,15 @@ function handlerIncomingEvent(event: Event): void {
     posts[data.id] = data;
   }
   if (type === EventTypeEnum.CommentCreated) {
-    posts[data[0].postId].comments.push(...data);
+    posts[data.postId].comments.push(data);
+  }
+  if (type === EventTypeEnum.CommentUpdated) {
+    const comment = posts[data.postId].comments.find(
+      (cmt) => cmt.id === data.id,
+    );
+    if (comment) {
+      comment.status = data.status;
+    }
   }
 }
 
